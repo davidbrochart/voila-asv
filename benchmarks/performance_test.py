@@ -90,7 +90,7 @@ def test_performance(sleep_per_cell=0.1, cell_nb=100, kernel_nb=10, max_meantime
 
     # wait until server is ready
     for line in get_lines(voila.stderr):
-        print(line, end='')
+        sys.stderr.write(line)
         if line.startswith('http://'):
             break
 
@@ -100,14 +100,14 @@ def test_performance(sleep_per_cell=0.1, cell_nb=100, kernel_nb=10, max_meantime
     # wait until all kernels have started
     kernel_i = 0
     for line in get_lines(voila.stderr):
-        print(line, end='')
+        sys.stderr.write(line)
         if 'Kernel started' in line:
             kernel_i += 1
             if kernel_i == kernel_nb:
                 # continue printing Voila's stderr in the background
                 def target():
                     for line in get_lines(voila.stderr):
-                        print(line, end='')
+                        sys.stderr.write(line)
                 threading.Thread(target=target).start()
                 break
 
