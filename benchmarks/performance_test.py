@@ -127,9 +127,11 @@ def test_performance(sleep_per_cell=0.1, cell_nb=100, kernel_nb=10, max_meantime
                 done = True
                 timeout = True
 
-    # stop Voila and all clients
+    # stop all clients first
+    for client in clients:
+        client.kill()
+    # then stop Voila
     voila.kill()
-    [client.kill() for client in clients]
 
     if timeout:
         raise TimeoutError
