@@ -4,6 +4,7 @@ import time
 import os
 import shutil
 import sys
+import math
 import nbformat
 
 
@@ -144,12 +145,13 @@ def test_performance(sleep_per_cell=0.1, cell_nb=100, kernel_nb=10, max_meantime
             data += [float(d) for d in f.read().split()]
 
     meantime_per_cell = sum(data) / len(data)
+    stddevtime_per_cell = math.sqrt(sum([(d - meantime_per_cell) ** 2 for d in data]) / (len(data) - 1))
     print('Mean time per cell', meantime_per_cell, end='')
     if meantime_per_cell > max_meantime_per_cell:
         print(' >', sleep_per_cell, '(maximum tolerated is', max_meantime_per_cell, ')')
     else:
         print(", should ideally be", sleep_per_cell, "but it's close enough!")
-    return meantime_per_cell
+    return meantime_per_cell, stddevtime_per_cell
 
 
 if __name__ == '__main__':
